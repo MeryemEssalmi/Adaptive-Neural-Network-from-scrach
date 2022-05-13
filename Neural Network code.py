@@ -138,7 +138,6 @@ class network:
             
 
     def update_error_hidden_layers(self):
-        n=self.number_of_layers
         if n==0:
             print("no hidden layers")
             return
@@ -230,127 +229,6 @@ lg_test=len(testing_input)
 #Labelstrainshuffled
 
 
-# In[3]:
-
-
-mean=np.mean(Inputsst)
-std=np.std(Inputsst)
-Inputs=(Inputsst-mean)/std
-
-
-# In[4]:
-
-
-#Inputs=Inputsst
-mean=np.mean(Inputstestu)
-std=np.std(Inputstestu)
-Inputstest=(Inputstestu-mean)/std
-
-# 
-# # In[7]:
-# 
-# 
-# net=network(1,[64],Inputs[0],10)
-# desiredout=[0 for i in range(net.number_of_classes)]
-# errors=[]
-# errorstest=[]
-# epochs=[]
-# indexestest=[i for i in range(1000)]
-# n=250
-# indexes=[rd.randrange(0,lg_data) for i in range(n)]
-# error=0
-# errortest=0
-# for j in indexes:
-#         net.input_layer=Inputs[j].copy()
-#         testout=teaching_input[j][0]
-#         net.Activate_network(net.nbrof_neuronsinlayer)
-#         output=net.classify()
-#         if output-testout!=0:
-#             error=error+1
-# errors.append(error/n)
-# epochs.append(0)
-# for e in indexestest:
-#     net.input_layer=Inputstest[e].copy()
-#     testouttest=testing_input[e][0]
-#     net.Activate_network(net.nbrof_neuronsinlayer)
-#     outputtest=net.classify()
-#     if outputtest-testouttest!=0:
-#         errortest=errortest+1
-#     #print(abs(output-testout))
-# errorstest.append(errortest/1000)
-# for epoch in range(300):
-#     error=0
-#     errortest=0
-#     n=450
-#     indexes=[rd.randrange(0,lg_data) for i in range(n)]
-#     for i in indexes:
-#         desiredout=[0 for o in range(net.number_of_classes)]
-#         #print(i)
-#         #print(teaching_input[i][0])
-#         desiredout[teaching_input[i][0]]=1
-#         net.input_layer=Inputs[i].copy()
-#         net.desiredoutput=desiredout.copy()
-#         net.Activate_network(net.nbrof_neuronsinlayer)
-#         net.backpropagate()
-#     if epoch%10==0 and epoch!=0:
-#         for j in indexes:
-#             net.input_layer=Inputs[j].copy()
-#             testout=teaching_input[j][0]
-#             net.Activate_network(net.nbrof_neuronsinlayer)
-#             output=net.classify()
-#             if output-testout!=0:
-#                 error=error+1
-#         errors.append(error/n)
-#         epochs.append(epoch)
-#         
-#         for e in indexestest:
-#             net.input_layer=Inputstest[e].copy()
-#             testouttest=testing_input[e][0]
-#             net.Activate_network(net.nbrof_neuronsinlayer)
-#             outputtest=net.classify()
-#             if outputtest-testouttest!=0:
-#                 errortest=errortest+1
-#             #print(abs(output-testout))
-#         errorstest.append(errortest/1000)
-#     if epoch%10==0:
-#         plt.figure()
-#         plt.plot(epochs,errors)
-#         plt.plot(epochs,errorstest)
-#         plt.show()
-# 
-#     print(epoch)
-#         
-# plt.figure()
-# plt.plot(epochs,errors)
-# plt.plot(epochs,errorstest)
-# plt.show()
-# 
-# 
-# 
-# # In[8]:
-# 
-# 
-# def save_object(obj, filename):
-#     with open(filename, 'wb') as outp:  # Overwrites any existing file.
-#         pickle.dump(obj, outp, pickle.HIGHEST_PROTOCOL)
-# 
-# 
-# # In[9]:
-# 
-# 
-# save_object(errors,'errors2.pkl')
-# save_object(net, 'network2.pkl')
-# save_object(epochs,'epochs2.pkl')
-# save_object(errorstest,'errorstest2.pkl')
-# 
-# 
-# # In[10]:
-# 
-# 
-# 
-# 
-# # In[11]:
-
 ####Testing the performance and loading the model
 import pandas as pd
 import random as rd
@@ -373,45 +251,6 @@ with open('errorstest3.pkl', 'rb') as inp:
 with open('epochs3.pkl', 'rb') as inp:
     epochs = pickle.load(inp)
 #     
-# In[12]:
-plt.figure()
-plt.plot(epochs,errors,label='Training error fraction')
-plt.plot(epochs,errorstest,label='Testing errors fraction')
-plt.title("Error fraction for Training and Testing data each 10th epochs")
-plt.legend()
-plt.xlabel('epochs')
-plt.ylabel('Error fraction')
-plt.show()
-
-
-Ypred=[]
-Ypredtest=[]
-for j in range (lg_data):
-    nettrained.input_layer=Inputs[j].copy()
-    testout=teaching_input[j][0]
-    nettrained.Activate_network(nettrained.nbrof_neuronsinlayer)
-    output=nettrained.classify()
-    Ypred.append(output)
-
-for e in range (lg_test):
-    nettrained.input_layer=Inputstest[e].copy()
-    testouttest=testing_input[e][0]
-    nettrained.Activate_network(nettrained.nbrof_neuronsinlayer)
-    outputtest=nettrained.classify()
-    Ypredtest.append(outputtest)
-            
-    
-
-
-# In[14]:
-
-
-print(len(Ypredtest))
-print(len(Ypred))
-
-
-# In[15]:
-
 
 from sklearn import metrics
 cm=metrics.confusion_matrix(teaching_input,Ypred)
